@@ -1,0 +1,32 @@
+name: keycloak-server
+
+services:
+
+  keycloak-server:
+    container_name: keycloak-server
+    image: quay.io/keycloak/keycloak:26.3.1
+    restart: always
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: dev-file
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 8087
+      KC_FEATURES: scripts
+      KC_PROFILE: preview
+    ports:
+      - 8087:8087
+    volumes:
+      - ./person-realm.json:/opt/keycloak/data/import/person-realm.json
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - my-network
+
+volumes:
+  keycloak_data:
+
+networks:
+  my-network:
+    name: my-network
